@@ -11,8 +11,11 @@ class Container extends Component {
             "Sort by title in descending order",
             "Sort by title in ascending order"
         ],
-        slectedOption: "Sort by year in descending order",
         list:[],
+        filterData:{ 
+            titleText:"",
+            orderby:"Sort by year in descending order",
+        },
         loading: true,
         total:0
       };
@@ -34,10 +37,37 @@ class Container extends Component {
 
     setData = ({entries, total })=>{
         const { tab } = this.props;
+        const { filterData } = this.state;
         const match = tab === "Series" ? "series" : "movie";
 
         const newList = entries.filter(item => {
+
+            if(filterData["titleText"]){
+                return item["programType"] === match && item["title"].includes(filterData["titleText"]);
+            }
+
             return item["programType"] === match;
+        });
+
+        let sort = {
+            "Sort by year in descending order": { machineKey:"releaseYear",
+                                                    orderby: ">" },
+            "Sort by year in ascending order":{ machineKey:"releaseYear",
+                                                orderby: "<" },
+            "Sort by title in descending order":{ machineKey:"title",
+            orderby: ">" },
+            "Sort by title in ascending order":{ machineKey:"title",
+            orderby: "<" },
+        }
+
+        const filterObj = sort[filterData["orderby"]];
+
+
+        newList.sort((a, b) => {
+            if(filterObj["orderby"] === "<")   
+                return (a[filterObj["machineKey"]] < b[filterObj["machineKey"]] ? -1 : 1)
+            else
+                return (a[filterObj["machineKey"]] > b[filterObj["machineKey"]] ? -1 : 1);
         });
 
         this.setState({
@@ -63,19 +93,35 @@ class Container extends Component {
       };
     
 
-    onSearch = (value)=> {
-        
-        console.log("  value ", value);
+    onSearch = (e)=> {
+
+        let filterData = {
+            ...this.state.filterData, 
+            titleText:e.target.value.trim(),
+        }
+
+        this.setState({filterData}, ()=>{
+            let titleText = this.state.filterData["titleText"];
+            if(titleText.length > 2 || titleText.length===0)
+            this.apiCall();
+        });
     }
     onSelectChange = (slectedOption)=>{
-        console.log("  selected ", slectedOption);
-        this.setState({slectedOption});
+
+        let filterData = {
+            ...this.state.filterData, 
+            orderby: slectedOption,
+        }
+        this.setState({filterData},()=>{
+            this.apiCall();
+        });
     }
+
     render() {
-        const { options, slectedOption, list, loading } = this.state;
+        const { options, filterData, list, loading } = this.state;
       return (
         <div className="container">
-            <FilterBar options={options} onSearch={this.onSearch} slectedOption={slectedOption } onSelectChange={this.onSelectChange}/>
+            <FilterBar options={options} onSearch={this.onSearch} slectedOption={filterData["orderby"]} onSelectChange={this.onSelectChange}/>
             <br/>
             <ContainerBody  list={list} loading={loading}/>
             

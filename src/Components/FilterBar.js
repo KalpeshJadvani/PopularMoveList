@@ -15,7 +15,7 @@ class FilterBar extends Component {
       return (
             <Row gutter={24} >
                 <Col span={12}>
-                    <Search size="middle"  placeholder="enter movie or series" onSearch={this.props.onSearch} enterButton />
+                    <Search size="middle"  placeholder="enter movie or series" onChange={this.props.onSearch} />
                 </Col>
                 <Col span={12}>
                     <Select size="middle" value={slectedOption} onChange={this.props.onSelectChange} >

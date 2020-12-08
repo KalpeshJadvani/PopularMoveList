@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Loader from './elements/Loader';
 import { Layout, Row, Alert, Modal } from 'antd';
 import CardBox from './elements/CardBox';
+import NoData from './elements/NoData';
 const { Content } = Layout;
 class ContainerBody extends Component {
     constructor(props) {
@@ -21,21 +22,20 @@ class ContainerBody extends Component {
 
     render() {
         const { loading, list } = this.props; 
-
-
-
       return (
         <Content >
             {loading ?  <Loader /> :
                 <Row gutter={16} type="flex" justify="center">
                     {list !== null &&
-                        list.length > 0 &&
+                        list.length > 0 ?
                         list.map((result, index) => (
                         <CardBox
                             key={index}
                             {...result}
                         />
-                        ))}
+                        )) :
+                        <NoData msg={'Data Not Found.'} />
+                        }
                 </Row>
             
             }
