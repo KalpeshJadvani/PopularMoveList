@@ -17,6 +17,7 @@ class Container extends Component {
             orderby:"Sort by year in descending order",
         },
         loading: true,
+        error:undefined,
         total:0
       };
       
@@ -43,7 +44,7 @@ class Container extends Component {
         const newList = entries.filter(item => {
 
             if(filterData["titleText"]){
-                return item["programType"] === match && item["title"].includes(filterData["titleText"]);
+                return item["programType"] === match && item["title"].toLowerCase().includes(filterData["titleText"]);
             }
 
             return item["programType"] === match;
@@ -73,6 +74,7 @@ class Container extends Component {
         this.setState({
             total:total,
             list: newList || [],
+            error: undefined,
             loading: false,
           });
     }
@@ -97,7 +99,7 @@ class Container extends Component {
 
         let filterData = {
             ...this.state.filterData, 
-            titleText:e.target.value.trim(),
+            titleText: e.target.value.toLowerCase().trim(),
         }
 
         this.setState({filterData}, ()=>{
@@ -118,12 +120,12 @@ class Container extends Component {
     }
 
     render() {
-        const { options, filterData, list, loading } = this.state;
+        const { options, filterData, list, loading, error } = this.state;
       return (
         <div className="container">
             <FilterBar options={options} onSearch={this.onSearch} slectedOption={filterData["orderby"]} onSelectChange={this.onSelectChange}/>
             <br/>
-            <ContainerBody  list={list} loading={loading}/>
+            <ContainerBody  list={list} error={error} loading={loading}/>
             
         </div>
       );

@@ -21,9 +21,22 @@ class ContainerBody extends Component {
 
 
     render() {
-        const { loading, list } = this.props; 
+        const { loading, list, error } = this.props; 
+
+      if(error){
+        return (
+        <Content >
+          <Row gutter={16} type="flex" justify="center">
+            <NoData msg={'Some error is coming while loading.'} />
+          </Row>
+        </Content>
+      );
+
+      }
+        
       return (
         <Content >
+        
             {loading ?  <Loader /> :
                 <Row gutter={16} type="flex" justify="center">
                     {list !== null &&
