@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Loader from './elements/Loader';
-import { Layout, Row, Alert, Modal } from 'antd';
+import { Layout, Row } from 'antd';
 import CardBox from './elements/CardBox';
 import NoData from './elements/NoData';
 const { Content } = Layout;

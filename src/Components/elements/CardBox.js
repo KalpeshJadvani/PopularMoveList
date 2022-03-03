@@ -1,9 +1,9 @@
 import React from 'react';
-import { Col, Row, Card, Tag } from 'antd';
+import { Col, Card } from 'antd';
 const { Meta } = Card;
-const upperCase = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
+// const upperCase = (str) => {
+//     return str.charAt(0).toUpperCase() + str.slice(1);
+//   };
 
 const CardBox = ({ title, description, releaseYear, images })=>{
 
